@@ -1,0 +1,507 @@
+/* ===== Windows 95 Theme ===== */
+
+
+:root {
+    --bg-desktop: #008080;
+    --bg-window: #c0c0c0;
+    --bg-field: #ffffff;
+    --bg-cell: #ffffff;
+    --bg-header-cell: #d4d0c8;
+
+    --text-primary: #000000;
+    --text-secondary: #444444;
+    --text-header: #000000;
+    --text-disabled: #808080;
+
+    --border-light: #ffffff;
+    --border-mid: #c0c0c0;
+    --border-dark: #808080;
+    --border-darkest: #000000;
+
+    --btn-face: #c0c0c0;
+    --btn-highlight: #ffffff;
+    --btn-shadow: #808080;
+    --btn-dark-shadow: #000000;
+
+    --title-bar: #000080;
+    --title-bar-text: #ffffff;
+
+    --font-system: 'MS Sans Serif', 'Microsoft Sans Serif', Tahoma, 'Segoe UI', sans-serif;
+    --font-mono: 'Courier New', Courier, monospace;
+}
+
+/* ===== Reset & Base ===== */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 14px;
+}
+
+body {
+    font-family: var(--font-system);
+    background: var(--bg-desktop);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.4;
+}
+
+/* ===== Win95 3D border mixins ===== */
+
+/* Raised (button / window) */
+.raised {
+    border: 2px solid;
+    border-color: var(--btn-highlight) var(--btn-dark-shadow) var(--btn-dark-shadow) var(--btn-highlight);
+    box-shadow: inset 1px 1px 0 var(--btn-highlight), inset -1px -1px 0 var(--btn-shadow);
+}
+
+/* Sunken (input / well) */
+.sunken {
+    border: 2px solid;
+    border-color: var(--btn-shadow) var(--btn-highlight) var(--btn-highlight) var(--btn-shadow);
+    box-shadow: inset 1px 1px 0 var(--btn-dark-shadow), inset -1px -1px 0 var(--border-light);
+}
+
+/* ===== App Layout ===== */
+.app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 100vh;
+}
+
+/* ===== Header (Title Bar style) ===== */
+.header {
+    background: var(--bg-window);
+    border: 2px solid;
+    border-color: var(--btn-highlight) var(--btn-dark-shadow) var(--btn-dark-shadow) var(--btn-highlight);
+    padding: 2px;
+}
+
+.logo {
+    background: var(--title-bar);
+    padding: 2px 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.logo svg {
+    display: none;
+}
+
+.logo h1 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--title-bar-text);
+    letter-spacing: 0;
+}
+
+.tagline {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    padding: 3px 6px 2px;
+}
+
+/* ===== Main Grid ===== */
+.main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    flex: 1;
+}
+
+@media (max-width: 900px) {
+    .main {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Panels (Windows) ===== */
+.panel {
+    background: var(--bg-window);
+    border: 2px solid;
+    border-color: var(--btn-highlight) var(--btn-dark-shadow) var(--btn-dark-shadow) var(--btn-highlight);
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    animation: none;
+}
+
+.panel-header {
+    background: var(--title-bar);
+    padding: 2px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.panel-header h2 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--title-bar-text);
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+/* ===== Panel body padding ===== */
+.editor-panel>*:not(.panel-header),
+.output-panel>*:not(.panel-header) {
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+.editor-panel>*:last-child,
+.output-panel>*:last-child {
+    margin-bottom: 6px;
+}
+
+/* ===== Title Input ===== */
+.title-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.title-row label {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.title-row textarea {
+    background: var(--bg-field);
+    border: 2px solid;
+    border-color: var(--btn-shadow) var(--btn-highlight) var(--btn-highlight) var(--btn-shadow);
+    box-shadow: inset 1px 1px 0 var(--btn-dark-shadow);
+    padding: 3px 4px;
+    color: var(--text-primary);
+    font-family: var(--font-system);
+    font-size: 0.9rem;
+    outline: none;
+    resize: vertical;
+    line-height: 1.4;
+    border-radius: 0;
+}
+
+.title-row textarea:focus {
+    outline: 1px dotted var(--text-primary);
+    outline-offset: -4px;
+}
+
+/* ===== Toolbar ===== */
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-wrap: wrap;
+    padding: 2px 0;
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 1px;
+}
+
+.toolbar-divider {
+    width: 2px;
+    height: 22px;
+    margin: 0 3px;
+    border-left: 1px solid var(--btn-shadow);
+    border-right: 1px solid var(--btn-highlight);
+    background: none;
+}
+
+.toolbar button {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--btn-face);
+    border: 2px solid;
+    border-color: var(--btn-highlight) var(--btn-dark-shadow) var(--btn-dark-shadow) var(--btn-highlight);
+    box-shadow: inset -1px -1px 0 var(--btn-shadow), inset 1px 1px 0 var(--border-light);
+    border-radius: 0;
+    padding: 2px 6px;
+    color: var(--text-primary);
+    font-family: var(--font-system);
+    font-size: 0.8rem;
+    font-weight: 400;
+    cursor: pointer;
+    white-space: nowrap;
+    min-height: 24px;
+    transition: none;
+}
+
+.toolbar button:hover {
+    background: var(--btn-face);
+}
+
+.toolbar button:active {
+    border-color: var(--btn-dark-shadow) var(--btn-highlight) var(--btn-highlight) var(--btn-dark-shadow);
+    box-shadow: inset 1px 1px 0 var(--btn-shadow);
+    padding: 3px 5px 1px 7px;
+    transform: none;
+}
+
+.toolbar button.active {
+    border-color: var(--btn-dark-shadow) var(--btn-highlight) var(--btn-highlight) var(--btn-dark-shadow);
+    box-shadow: inset 1px 1px 0 var(--btn-shadow);
+    background: #b0b0b0;
+}
+
+.toolbar button svg {
+    flex-shrink: 0;
+}
+
+/* ===== Table Editor ===== */
+.table-wrapper {
+    overflow-x: auto;
+    border: 2px solid;
+    border-color: var(--btn-shadow) var(--btn-highlight) var(--btn-highlight) var(--btn-shadow);
+    box-shadow: inset 1px 1px 0 var(--btn-dark-shadow);
+    background: var(--bg-field);
+    border-radius: 0;
+}
+
+#edit-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    min-width: 300px;
+}
+
+#edit-table th,
+#edit-table td {
+    border: 1px solid var(--border-dark);
+    padding: 2px 4px;
+    min-width: 100px;
+    min-height: 24px;
+    height: 24px;
+    font-size: 0.9rem;
+    font-family: var(--font-system);
+    line-height: 1.3;
+    outline: none;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    transition: none;
+}
+
+#edit-table th {
+    background: var(--bg-header-cell);
+    font-weight: 700;
+    color: var(--text-header);
+}
+
+#edit-table td {
+    background: var(--bg-cell);
+    color: var(--text-primary);
+}
+
+#edit-table th:focus,
+#edit-table td:focus {
+    outline: 1px dotted var(--text-primary);
+    outline-offset: -2px;
+    background: #e0e0ff;
+}
+
+#edit-table td b,
+#edit-table th b,
+#edit-table td strong,
+#edit-table th strong {
+    font-weight: 700;
+}
+
+#edit-table td i,
+#edit-table th i,
+#edit-table td em,
+#edit-table th em {
+    font-style: italic;
+}
+
+/* ===== Defaults Bar ===== */
+.defaults-bar {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+/* ===== Buttons ===== */
+.btn-primary,
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--btn-face);
+    border: 2px solid;
+    border-color: var(--btn-highlight) var(--btn-dark-shadow) var(--btn-dark-shadow) var(--btn-highlight);
+    box-shadow: inset -1px -1px 0 var(--btn-shadow), inset 1px 1px 0 var(--border-light);
+    border-radius: 0;
+    padding: 3px 10px;
+    color: var(--text-primary);
+    font-family: var(--font-system);
+    font-size: 0.85rem;
+    font-weight: 400;
+    cursor: pointer;
+    min-height: 26px;
+    transition: none;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+    background: var(--btn-face);
+    box-shadow: inset -1px -1px 0 var(--btn-shadow), inset 1px 1px 0 var(--border-light);
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+    border-color: var(--btn-dark-shadow) var(--btn-highlight) var(--btn-highlight) var(--btn-dark-shadow);
+    box-shadow: inset 1px 1px 0 var(--btn-shadow);
+    padding: 4px 9px 2px 11px;
+    transform: none;
+}
+
+.btn-primary:focus,
+.btn-secondary:focus {
+    outline: 1px dotted var(--text-primary);
+    outline-offset: -5px;
+}
+
+.btn-ghost {
+    background: var(--btn-face);
+    border: 2px solid;
+    border-color: var(--btn-highlight) var(--btn-dark-shadow) var(--btn-dark-shadow) var(--btn-highlight);
+    box-shadow: inset -1px -1px 0 var(--btn-shadow), inset 1px 1px 0 var(--border-light);
+    border-radius: 0;
+    padding: 3px 10px;
+    color: var(--text-primary);
+    font-family: var(--font-system);
+    font-size: 0.85rem;
+    cursor: pointer;
+    min-height: 26px;
+    transition: none;
+}
+
+.btn-ghost:hover {
+    color: var(--text-primary);
+}
+
+.btn-ghost:active {
+    border-color: var(--btn-dark-shadow) var(--btn-highlight) var(--btn-highlight) var(--btn-dark-shadow);
+    box-shadow: inset 1px 1px 0 var(--btn-shadow);
+}
+
+/* ===== Format Selector ===== */
+.format-selector {
+    display: flex;
+    gap: 2px;
+    background: none;
+    border-radius: 0;
+    padding: 0;
+}
+
+.format-selector label {
+    cursor: pointer;
+}
+
+.format-selector input {
+    display: none;
+}
+
+.format-selector span {
+    display: block;
+    padding: 1px 8px;
+    border-radius: 0;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--title-bar-text);
+    opacity: 0.7;
+    transition: none;
+    border: 1px solid transparent;
+}
+
+.format-selector input:checked+span {
+    background: rgba(255, 255, 255, 0.2);
+    opacity: 1;
+    border: 1px dotted var(--title-bar-text);
+}
+
+/* ===== Output ===== */
+.output-wrapper {
+    flex: 1;
+    overflow: auto;
+    border: 2px solid;
+    border-color: var(--btn-shadow) var(--btn-highlight) var(--btn-highlight) var(--btn-shadow);
+    box-shadow: inset 1px 1px 0 var(--btn-dark-shadow);
+    background: var(--bg-field);
+    min-height: 200px;
+    border-radius: 0;
+}
+
+.output-preview {
+    padding: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--text-primary);
+    white-space: pre;
+    overflow-x: auto;
+    margin: 0;
+}
+
+/* ===== Copy Bar ===== */
+.copy-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.copy-feedback {
+    font-size: 0.82rem;
+    color: #000080;
+    opacity: 0;
+    transition: opacity 200ms;
+}
+
+.copy-feedback.show {
+    opacity: 1;
+}
+
+/* ===== Scrollbar (keep native for Win95 feel) ===== */
+::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+}
+
+::-webkit-scrollbar-track {
+    background: #c0c0c0;
+    border: 1px solid var(--btn-shadow);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--btn-face);
+    border: 2px solid;
+    border-color: var(--btn-highlight) var(--btn-dark-shadow) var(--btn-dark-shadow) var(--btn-highlight);
+    box-shadow: inset -1px -1px 0 var(--btn-shadow);
+}
+
+::-webkit-scrollbar-button {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: var(--btn-face);
+    border: 2px solid;
+    border-color: var(--btn-highlight) var(--btn-dark-shadow) var(--btn-dark-shadow) var(--btn-highlight);
+}

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+    <!-- Window background -->
+    <rect x="1" y="1" width="30" height="30" fill="#c0c0c0"/>
+    <!-- Raised border -->
+    <path d="M0,0 H32 V1 H1 V32 H0 Z" fill="#ffffff"/>
+    <path d="M32,32 H0 V31 H31 V0 H32 Z" fill="#000000"/>
+    <path d="M31,31 H1 V30 H30 V1 H31 Z" fill="#808080"/>
+    <!-- Title bar -->
+    <rect x="2" y="2" width="28" height="6" fill="#000080"/>
+    <!-- Table grid -->
+    <rect x="4" y="10" width="24" height="18" fill="#ffffff"/>
+    <rect x="4" y="10" width="24" height="1" fill="#808080"/>
+    <rect x="4" y="28" width="24" height="1" fill="#808080"/>
+    <rect x="4" y="10" width="1" height="18" fill="#808080"/>
+    <rect x="27" y="10" width="1" height="18" fill="#808080"/>
+    <!-- Grid lines -->
+    <rect x="4" y="16" width="24" height="1" fill="#808080"/>
+    <rect x="4" y="22" width="24" height="1" fill="#808080"/>
+    <rect x="14" y="10" width="1" height="18" fill="#808080"/>
+    <!-- Header cells -->
+    <rect x="5" y="11" width="9" height="5" fill="#d4d0c8"/>
+    <rect x="15" y="11" width="12" height="5" fill="#d4d0c8"/>
+</svg>
