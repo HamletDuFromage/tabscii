@@ -460,7 +460,7 @@
                     'text/plain': textBlob,
                 }),
             ]);
-            showFeedback('Copied! Paste into Gmail with monospace formatting ✓');
+            showFeedback('Copied ✓');
         } catch {
             // Fallback: plain text copy
             try {
