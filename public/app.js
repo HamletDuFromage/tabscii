@@ -502,9 +502,19 @@
         showFeedback('Defaults saved ✓');
     }
 
-    function clearDefaults() {
-        localStorage.removeItem(STORAGE_KEY);
-        showFeedback('Defaults cleared');
+    function resetToDefault() {
+        const saved = loadDefaults();
+        if (saved) {
+            if (saved.format) {
+                formatRadios.forEach(r => {
+                    r.checked = r.value === saved.format;
+                });
+            }
+            initTable(saved);
+        } else {
+            initTable(null);
+        }
+        showFeedback('Reset to default');
     }
 
     function loadDefaults() {
@@ -564,7 +574,7 @@
     $headerToggle.addEventListener('click', toggleHeaderRow);
     $copyBtn.addEventListener('click', copyToClipboard);
     document.getElementById('btn-save-default').addEventListener('click', saveDefaults);
-    document.getElementById('btn-clear-default').addEventListener('click', clearDefaults);
+    document.getElementById('btn-reset-default').addEventListener('click', resetToDefault);
     $title.addEventListener('input', scheduleUpdate);
     formatRadios.forEach(r => r.addEventListener('change', scheduleUpdate));
 
