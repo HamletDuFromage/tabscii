@@ -275,12 +275,58 @@ body {
 
 /* ===== Table Editor ===== */
 .table-wrapper {
-    overflow-x: auto;
+    position: relative;
+    overflow: auto;
+    padding-top: 20px;
+    padding-left: 20px;
     border: 2px solid;
     border-color: var(--btn-shadow) var(--btn-highlight) var(--btn-highlight) var(--btn-shadow);
     box-shadow: inset 1px 1px 0 var(--btn-dark-shadow);
     background: var(--bg-field);
     border-radius: 0;
+}
+
+/* ===== Drag & Drop Grips ===== */
+.drag-grip {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--btn-face);
+    border: 1px solid var(--border-darkest);
+    box-shadow: inset 1px 1px 0 var(--btn-highlight), inset -1px -1px 0 var(--btn-shadow);
+    color: var(--text-primary);
+    cursor: grab;
+    user-select: none;
+    z-index: 10;
+}
+
+.drag-grip:active {
+    cursor: grabbing;
+}
+
+.drag-grip-row {
+    left: 2px;
+    width: 16px;
+    font-size: 12px;
+}
+
+.drag-grip-col {
+    top: 2px;
+    height: 16px;
+    font-size: 14px;
+    line-height: 14px;
+}
+
+/* Visual feedback for drag over */
+#edit-table td.drag-over-row,
+#edit-table th.drag-over-row {
+    border-top: 2px solid var(--title-bar);
+}
+
+#edit-table td.drag-over-col,
+#edit-table th.drag-over-col {
+    border-left: 2px solid var(--title-bar);
 }
 
 #edit-table {

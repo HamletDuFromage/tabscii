@@ -578,6 +578,165 @@
     $title.addEventListener('input', scheduleUpdate);
     formatRadios.forEach(r => r.addEventListener('change', scheduleUpdate));
 
+    /* ---------- Drag & Drop Reordering ---------- */
+
+    const $tableWrapper = document.getElementById('table-wrapper');
+    const rowGrip = document.createElement('div');
+    rowGrip.className = 'drag-grip drag-grip-row';
+    rowGrip.draggable = true;
+    rowGrip.innerHTML = '⋮';
+
+    const colGrip = document.createElement('div');
+    colGrip.className = 'drag-grip drag-grip-col';
+    colGrip.draggable = true;
+    colGrip.innerHTML = '⋯';
+
+    $tableWrapper.appendChild(rowGrip);
+    $tableWrapper.appendChild(colGrip);
+
+    let activeDragRow = -1;
+    let activeDragCol = -1;
+    let currentDragType = null;
+    let currentDragSource = -1;
+
+    $tableWrapper.addEventListener('mousemove', (e) => {
+        if (currentDragType) return;
+        const cell = e.target.closest('td, th');
+        if (!cell || cell.closest('#table-wrapper') !== $tableWrapper) {
+            rowGrip.classList.remove('visible');
+            colGrip.classList.remove('visible');
+            return;
+        }
+
+        const tr = cell.parentNode;
+        const allRows = getRows();
+        activeDragRow = allRows.indexOf(tr);
+        activeDragCol = Array.from(tr.cells).indexOf(cell);
+
+        const wrapRect = $tableWrapper.getBoundingClientRect();
+        const trRect = tr.getBoundingClientRect();
+        const tdRect = cell.getBoundingClientRect();
+
+        rowGrip.style.top = (trRect.top - wrapRect.top + $tableWrapper.scrollTop) + 'px';
+        rowGrip.style.height = trRect.height + 'px';
+        rowGrip.classList.add('visible');
+
+        colGrip.style.left = (tdRect.left - wrapRect.left + $tableWrapper.scrollLeft) + 'px';
+        colGrip.style.width = tdRect.width + 'px';
+        colGrip.classList.add('visible');
+    });
+
+    $tableWrapper.addEventListener('mouseleave', () => {
+        if (!currentDragType) {
+            rowGrip.classList.remove('visible');
+            colGrip.classList.remove('visible');
+        }
+    });
+
+    rowGrip.addEventListener('dragstart', (e) => {
+        currentDragType = 'row';
+        currentDragSource = activeDragRow;
+        if (e.dataTransfer) {
+            e.dataTransfer.effectAllowed = 'move';
+        }
+    });
+
+    colGrip.addEventListener('dragstart', (e) => {
+        currentDragType = 'col';
+        currentDragSource = activeDragCol;
+        if (e.dataTransfer) {
+            e.dataTransfer.effectAllowed = 'move';
+        }
+    });
+
+    document.getElementById('edit-table').addEventListener('dragover', (e) => {
+        if (!currentDragType) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+
+        const cell = e.target.closest('td, th');
+        if (!cell) return;
+
+        document.querySelectorAll('.drag-over-row, .drag-over-col').forEach(el => {
+            el.classList.remove('drag-over-row', 'drag-over-col');
+        });
+
+        const tr = cell.parentNode;
+        const allRows = getRows();
+        const hoverRowIndex = allRows.indexOf(tr);
+        const hoverColIndex = Array.from(tr.cells).indexOf(cell);
+
+        if (currentDragType === 'row' && hoverRowIndex !== -1 && hoverRowIndex !== currentDragSource) {
+            Array.from(tr.cells).forEach(c => c.classList.add('drag-over-row'));
+        } else if (currentDragType === 'col' && hoverColIndex !== -1 && hoverColIndex !== currentDragSource) {
+            allRows.forEach(r => {
+                if (r.cells[hoverColIndex]) {
+                    r.cells[hoverColIndex].classList.add('drag-over-col');
+                }
+            });
+        }
+    });
+
+    document.getElementById('edit-table').addEventListener('dragleave', (e) => {
+        if (!e.relatedTarget || !e.relatedTarget.closest('#edit-table')) {
+            document.querySelectorAll('.drag-over-row, .drag-over-col').forEach(el => {
+                el.classList.remove('drag-over-row', 'drag-over-col');
+            });
+        }
+    });
+
+    document.getElementById('edit-table').addEventListener('drop', (e) => {
+        if (!currentDragType) return;
+        e.preventDefault();
+
+        document.querySelectorAll('.drag-over-row, .drag-over-col').forEach(el => {
+            el.classList.remove('drag-over-row', 'drag-over-col');
+        });
+
+        const cell = e.target.closest('td, th');
+        if (!cell) {
+            resetDrag();
+            return;
+        }
+
+        const tr = cell.parentNode;
+        const allRows = getRows();
+        const dropRowIndex = allRows.indexOf(tr);
+        const dropColIndex = Array.from(tr.cells).indexOf(cell);
+
+        if (currentDragType === 'row' && dropRowIndex !== -1 && dropRowIndex !== currentDragSource) {
+            const data = serializeTable();
+            let insertIdx = dropRowIndex;
+            if (currentDragSource < dropRowIndex) insertIdx--;
+            const moved = data.rows.splice(currentDragSource, 1)[0];
+            data.rows.splice(insertIdx, 0, moved);
+            initTable(data);
+        } else if (currentDragType === 'col' && dropColIndex !== -1 && dropColIndex !== currentDragSource) {
+            const data = serializeTable();
+            let insertIdx = dropColIndex;
+            if (currentDragSource < dropColIndex) insertIdx--;
+            data.rows.forEach(r => {
+                const moved = r.splice(currentDragSource, 1)[0];
+                r.splice(insertIdx, 0, moved);
+            });
+            initTable(data);
+        }
+
+        resetDrag();
+    });
+
+    document.addEventListener('dragend', resetDrag);
+
+    function resetDrag() {
+        currentDragType = null;
+        currentDragSource = -1;
+        rowGrip.classList.remove('visible');
+        colGrip.classList.remove('visible');
+        document.querySelectorAll('.drag-over-row, .drag-over-col').forEach(el => {
+            el.classList.remove('drag-over-row', 'drag-over-col');
+        });
+    }
+
     /* ---------- Init ---------- */
 
     const saved = loadDefaults();
